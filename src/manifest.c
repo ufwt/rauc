@@ -50,6 +50,9 @@ static gboolean parse_manifest(GKeyFile *key_file, RaucManifest **manifest, GErr
 		raucm->handler_args = g_string_free(str, FALSE);
 	}
 
+	/* parse [hook] section */
+	raucm->hook_name = g_key_file_get_string(key_file, "hook", "filename", NULL);
+
 	/* parse [image.<slotclass>] and [file.<slotclass>/<destname>] sections */
 	groups = g_key_file_get_groups(key_file, &group_count);
 	for (gsize i = 0; i < group_count; i++) {
@@ -196,6 +199,9 @@ gboolean save_manifest_file(const gchar *filename, RaucManifest *mf, GError **er
 
 	if (mf->handler_args)
 		g_key_file_set_string(key_file, "handler", "args", mf->handler_args);
+
+	if (mf->hook_name)
+		g_key_file_set_string(key_file, "hook", "filename", mf->hook_name);
 
 	for (GList *l = mf->images; l != NULL; l = l->next) {
 		RaucImage *image = l->data;
