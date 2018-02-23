@@ -96,7 +96,7 @@ gboolean load_config(const gchar *filename, RaucConfig **config, GError **error)
 	}
 	bootloader = g_key_file_get_string(key_file, "system", "bootloader", NULL);
 	if (!bootloader) {
-		g_set_error_literal (
+		g_set_error_literal(
 				error,
 				R_CONFIG_ERROR,
 				R_CONFIG_ERROR_BOOTLOADER,
@@ -132,7 +132,7 @@ gboolean load_config(const gchar *filename, RaucConfig **config, GError **error)
 
 	if (g_strcmp0(c->system_bootloader, "grub") == 0) {
 		c->grubenv_path = resolve_path(filename,
-			g_key_file_get_string(key_file, "system", "grubenv", NULL));
+				g_key_file_get_string(key_file, "system", "grubenv", NULL));
 		if (!c->grubenv_path) {
 			g_debug("No grubenv path provided, using /boot/grub/grubenv as default");
 			c->grubenv_path = g_strdup("/boot/grub/grubenv");
@@ -215,28 +215,28 @@ gboolean load_config(const gchar *filename, RaucConfig **config, GError **error)
 	}
 
 	c->statusfile_path = resolve_path(filename,
-		g_key_file_get_string(key_file, "system", "statusfile", NULL));
+			g_key_file_get_string(key_file, "system", "statusfile", NULL));
 
 	/* parse [keyring] section */
 	c->keyring_path = resolve_path(filename,
-		g_key_file_get_string(key_file, "keyring", "path", NULL));
+			g_key_file_get_string(key_file, "keyring", "path", NULL));
 
 	/* parse [casync] section */
 	c->store_path = g_key_file_get_string(key_file, "casync", "storepath", NULL);
 
 	/* parse [autoinstall] section */
 	c->autoinstall_path = resolve_path(filename,
-		g_key_file_get_string(key_file, "autoinstall", "path", NULL));
+			g_key_file_get_string(key_file, "autoinstall", "path", NULL));
 
 	/* parse [handlers] section */
 	c->systeminfo_handler = resolve_path(filename,
-		g_key_file_get_string(key_file, "handlers", "system-info", NULL));
+			g_key_file_get_string(key_file, "handlers", "system-info", NULL));
 
 	c->preinstall_handler = resolve_path(filename,
-		g_key_file_get_string(key_file, "handlers", "pre-install", NULL));
+			g_key_file_get_string(key_file, "handlers", "pre-install", NULL));
 
 	c->postinstall_handler = resolve_path(filename,
-		g_key_file_get_string(key_file, "handlers", "post-install", NULL));
+			g_key_file_get_string(key_file, "handlers", "post-install", NULL));
 
 	/* parse [slot.*.#] sections */
 	slots = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, r_free_slot);
@@ -283,7 +283,7 @@ gboolean load_config(const gchar *filename, RaucConfig **config, GError **error)
 			slot->sclass = g_intern_string(groupsplit[1]);
 
 			value = resolve_path(filename,
-				g_key_file_get_string(key_file, groups[i], "device", &ierror));
+					g_key_file_get_string(key_file, groups[i], "device", &ierror));
 			if (!value) {
 				g_propagate_error(error, ierror);
 				res = FALSE;
@@ -341,7 +341,7 @@ gboolean load_config(const gchar *filename, RaucConfig **config, GError **error)
 
 		s = g_hash_table_lookup(slots, value);
 		if (!s) {
-			g_set_error (
+			g_set_error(
 					error,
 					R_CONFIG_ERROR,
 					R_CONFIG_ERROR_PARENT,
@@ -439,13 +439,13 @@ static void status_file_get_slot_status(GKeyFile *key_file, const gchar *group, 
 	count = g_key_file_get_uint64(key_file, group, "installed.count", &ierror);
 	if (g_error_matches(ierror, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_INVALID_VALUE)) {
 		g_message("Value of key \"installed.count\" in group [%s] "
-			"is no valid unsigned integer - setting to zero.", group);
+				"is no valid unsigned integer - setting to zero.", group);
 		count = 0;
 	}
 	g_clear_error(&ierror);
 	if (count > G_MAXUINT32) {
 		g_message("Value of key \"installed.count\" in group [%s] "
-			"is greater than G_MAXUINT32 - setting to zero.", group);
+				"is greater than G_MAXUINT32 - setting to zero.", group);
 		count = 0;
 	}
 	slotstatus->installed_count = count;
@@ -454,13 +454,13 @@ static void status_file_get_slot_status(GKeyFile *key_file, const gchar *group, 
 	count = g_key_file_get_uint64(key_file, group, "activated.count", &ierror);
 	if (g_error_matches(ierror, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_INVALID_VALUE)) {
 		g_message("Value of key \"activated.count\" in group [%s] "
-			"is no valid unsigned integer - setting to zero.", group);
+				"is no valid unsigned integer - setting to zero.", group);
 		count = 0;
 	}
 	g_clear_error(&ierror);
 	if (count > G_MAXUINT32) {
 		g_message("Value of key \"activated.count\" in group [%s] "
-			"is greater than G_MAXUINT32 - setting to zero.", group);
+				"is greater than G_MAXUINT32 - setting to zero.", group);
 		count = 0;
 	}
 	slotstatus->activated_count = count;

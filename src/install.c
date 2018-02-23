@@ -30,11 +30,11 @@
 /* All exit codes of hook script above this mean 'rejected' */
 #define INSTALL_HOOK_REJECT_CODE 10
 
-#define R_INSTALL_ERROR r_install_error_quark ()
+#define R_INSTALL_ERROR r_install_error_quark()
 
-GQuark r_install_error_quark (void)
+GQuark r_install_error_quark(void)
 {
-	return g_quark_from_static_string ("r_install_error_quark");
+	return g_quark_from_static_string("r_install_error_quark");
 }
 
 static void install_args_update(RaucInstallArgs *args, const gchar *msg) {
@@ -251,7 +251,7 @@ static gchar** get_all_manifest_slot_classes(const RaucManifest *manifest) {
 }
 
 /* Gets all classes that do not have a parent
- * 
+ *
  * @return newly allocated NULL-teminated string array. Free with g_strfreev */
 static gchar** get_root_system_slot_classes(void) {
 	GPtrArray *slotclasses = NULL;
@@ -307,7 +307,7 @@ static RaucSlot *select_inactive_slot_class_member(gchar *rootclass) {
 	return NULL;
 }
 
-/* 
+/*
  * Test if provided slot list contains slot instance (same pointer!)
  */
 static gboolean slot_list_contains(GList *slotlist, const RaucSlot *testslot) {
@@ -497,12 +497,12 @@ static gboolean verify_compatible(RaucManifest *manifest) {
 	if (r_context()->ignore_compatible) {
 		return TRUE;
 	} else if (g_strcmp0(r_context()->config->system_compatible,
-		      manifest->update_compatible) == 0) {
+				   manifest->update_compatible) == 0) {
 		return TRUE;
 	} else {
 		g_warning("incompatible manifest for this system (%s): %s",
-			  r_context()->config->system_compatible,
-			  manifest->update_compatible);
+				r_context()->config->system_compatible,
+				manifest->update_compatible);
 		return FALSE;
 	}
 }
@@ -624,7 +624,7 @@ static gboolean launch_and_wait_handler(gchar *update_source, gchar *handler_nam
 
 		parse_handler_output(outline);
 	} while (outline);
-	
+
 	res = g_subprocess_wait_check(handleproc, NULL, &ierror);
 	if (!res) {
 		g_propagate_error(error, ierror);
@@ -695,13 +695,13 @@ static gboolean run_bundle_hook(RaucManifest *manifest, gchar* bundledir, const 
 				g_set_error(error, R_INSTALL_ERROR, R_INSTALL_ERROR_REJECTED,
 						"Hook returned: %s", hookreturnmsg);
 			} else {
-				g_propagate_prefixed_error (
+				g_propagate_prefixed_error(
 						error,
 						ierror,
 						"Hook returned with exit code %d: ", ierror->code);
 			}
 		} else {
-			g_propagate_prefixed_error (
+			g_propagate_prefixed_error(
 					error,
 					ierror,
 					"failed to run bundle hook: ");
@@ -791,7 +791,7 @@ static gboolean launch_and_wait_default_handler(RaucInstallArgs *args, gchar* bu
 	g_message("Marking target slot as non-bootable...");
 	for (GList *l = install_images; l != NULL; l = l->next) {
 		RaucSlot *dest_slot = g_hash_table_lookup(target_group, ((RaucImage*)l->data)->slotclass);
-		
+
 		g_assert_nonnull(dest_slot);
 
 		if (dest_slot->parent || !dest_slot->bootname) {
@@ -916,10 +916,10 @@ static gboolean launch_and_wait_default_handler(RaucInstallArgs *args, gchar* bu
 		r_context_begin_step("copy_image", "Copying image", 0);
 
 		res = update_handler(
-			mfimage,
-			dest_slot,
-			hook_name,
-			&ierror);
+				mfimage,
+				dest_slot,
+				hook_name,
+				&ierror);
 		if (!res) {
 			g_propagate_prefixed_error(error, ierror,
 					"Failed updating slot: ");
@@ -976,13 +976,13 @@ image_out:
 			mark_active(dest_slot, &ierror);
 			if (g_error_matches(ierror, R_INSTALL_ERROR, R_INSTALL_ERROR_MARK_BOOTABLE)) {
 				g_set_error(error, R_INSTALL_ERROR, R_INSTALL_ERROR_MARK_BOOTABLE,
-					"Failed marking slot %s bootable", dest_slot->name);
+						"Failed marking slot %s bootable", dest_slot->name);
 				g_clear_error(&ierror);
 				goto out;
 			} else if (g_error_matches(ierror, R_INSTALL_ERROR, R_INSTALL_ERROR_FAILED)) {
 				g_set_error(error, R_INSTALL_ERROR, R_INSTALL_ERROR_FAILED,
-					"Marked slot %s bootable, but failed to write status file: %s",
-					dest_slot->name, ierror->message);
+						"Marked slot %s bootable, but failed to write status file: %s",
+						dest_slot->name, ierror->message);
 				g_clear_error(&ierror);
 				goto out;
 			}
@@ -1038,9 +1038,9 @@ next:
 }
 
 static gboolean launch_and_wait_network_handler(const gchar* base_url,
-						RaucManifest *manifest,
-						GHashTable *target_group,
-						GError **error) {
+		RaucManifest *manifest,
+		GHashTable *target_group,
+		GError **error) {
 	gboolean res = FALSE, invalid = FALSE;
 	GError *ierror = NULL;
 	gchar **fileclasses = NULL;
@@ -1058,7 +1058,7 @@ static gboolean launch_and_wait_network_handler(const gchar* base_url,
 	g_message("Marking active slot as non-bootable...");
 	for (gchar **cls = fileclasses; *cls != NULL; cls++) {
 		RaucSlot *slot = g_hash_table_lookup(target_group, *cls);
-		
+
 		g_assert_nonnull(slot);
 
 		if (slot->state & ST_ACTIVE && !slot->parent) {
@@ -1107,22 +1107,22 @@ static gboolean launch_and_wait_network_handler(const gchar* base_url,
 		for (GList *l = manifest->files; l != NULL; l = l->next) {
 			RaucFile *mffile = l->data;
 			gchar *filename = g_build_filename(slot->mount_point,
-							 mffile->destname,
-							 NULL);
+					mffile->destname,
+					NULL);
 			gchar *fileurl = g_strconcat(base_url, "/",
-						     mffile->filename, NULL);
+					mffile->filename, NULL);
 
 			res = verify_checksum(&mffile->checksum, filename, NULL);
 			if (res) {
 				g_message("Skipping download for correct file from %s",
-					  fileurl);
+						fileurl);
 				goto file_out;
 			}
 
 			res = reuse_existing_file_checksum(&mffile->checksum, filename);
 			if (res) {
 				g_message("Skipping download for reused file from %s",
-					  fileurl);
+						fileurl);
 				goto file_out;
 			}
 
