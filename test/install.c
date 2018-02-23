@@ -17,7 +17,8 @@ GMainLoop *r_loop = NULL;
 
 
 static void install_fixture_set_up_bundle(InstallFixture *fixture,
-		gconstpointer user_data) {
+		gconstpointer user_data)
+{
 	fixture->tmpdir = g_dir_make_tmp("rauc-XXXXXX", NULL);
 
 	fixture_helper_set_up_system(fixture->tmpdir, NULL);
@@ -25,7 +26,8 @@ static void install_fixture_set_up_bundle(InstallFixture *fixture,
 }
 
 static void install_fixture_set_up_bundle_central_status(InstallFixture *fixture,
-		gconstpointer user_data) {
+		gconstpointer user_data)
+{
 
 	fixture->tmpdir = g_dir_make_tmp("rauc-XXXXXX", NULL);
 
@@ -34,7 +36,8 @@ static void install_fixture_set_up_bundle_central_status(InstallFixture *fixture
 }
 
 static void install_fixture_set_up_bundle_custom_handler(InstallFixture *fixture,
-		gconstpointer user_data) {
+		gconstpointer user_data)
+{
 	const gchar *manifest_file = "\
 [update]\n\
 compatible=Test Config\n\
@@ -53,7 +56,8 @@ filename=rootfs.ext4\n\
 }
 
 static void install_fixture_set_up_bundle_install_check_hook(InstallFixture *fixture,
-		gconstpointer user_data) {
+		gconstpointer user_data)
+{
 	const gchar *manifest_file = "\
 [update]\n\
 compatible=Test Config\n\
@@ -75,7 +79,8 @@ filename=appfs.ext4";
 }
 
 static void install_fixture_set_up_bundle_install_hook(InstallFixture *fixture,
-		gconstpointer user_data) {
+		gconstpointer user_data)
+{
 	const gchar *manifest_file = "\
 [update]\n\
 compatible=Test Config\n\
@@ -98,7 +103,8 @@ hooks=install";
 }
 
 static void install_fixture_set_up_bundle_post_hook(InstallFixture *fixture,
-		gconstpointer user_data) {
+		gconstpointer user_data)
+{
 	const gchar *manifest_file = "\
 [update]\n\
 compatible=Test Config\n\
@@ -194,7 +200,8 @@ device=/path/to/prebootloader";
 	g_free(pathname);
 }
 
-static void rename_manifest(const gchar *contentdir, const gchar *targetname) {
+static void rename_manifest(const gchar *contentdir, const gchar *targetname)
+{
 	gchar *manifestpath1 = g_strconcat(contentdir,
 			"/manifest.raucm", NULL);
 	gchar *manifestpath2 = g_strconcat(contentdir,
@@ -214,7 +221,8 @@ static void rename_manifest(const gchar *contentdir, const gchar *targetname) {
 }
 
 static void install_fixture_set_up_network(InstallFixture *fixture,
-		gconstpointer user_data) {
+		gconstpointer user_data)
+{
 	RaucManifest *rm = g_new0(RaucManifest, 1);
 	RaucFile *files;
 	gchar *contentdir;
@@ -892,14 +900,16 @@ device=/dev/null\n\
 	g_hash_table_unref(tgrp);
 }
 
-static gboolean r_quit(gpointer data) {
+static gboolean r_quit(gpointer data)
+{
 	g_assert_nonnull(r_loop);
 	g_main_loop_quit(r_loop);
 
 	return G_SOURCE_REMOVE;
 }
 
-static gboolean install_notify(gpointer data) {
+static gboolean install_notify(gpointer data)
+{
 	RaucInstallArgs *args = data;
 
 	g_assert_nonnull(args);

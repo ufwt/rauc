@@ -8,7 +8,8 @@
 #include "mount.h"
 #include "utils.h"
 
-gboolean r_mount_full(const gchar *source, const gchar *mountpoint, const gchar* type, gsize size, GError **error) {
+gboolean r_mount_full(const gchar *source, const gchar *mountpoint, const gchar* type, gsize size, GError **error)
+{
 	GSubprocess *sproc = NULL;
 	GError *ierror = NULL;
 	gboolean res = FALSE;
@@ -57,11 +58,13 @@ out:
 }
 
 
-gboolean r_mount_loop(const gchar *filename, const gchar *mountpoint, gsize size, GError **error) {
+gboolean r_mount_loop(const gchar *filename, const gchar *mountpoint, gsize size, GError **error)
+{
 	return r_mount_full(filename, mountpoint, "squashfs", size, error);
 }
 
-gboolean r_umount(const gchar *filename, GError **error) {
+gboolean r_umount(const gchar *filename, GError **error)
+{
 	GSubprocess *sproc = NULL;
 	GError *ierror = NULL;
 	gboolean res = FALSE;
@@ -102,7 +105,8 @@ out:
 
 
 /* Creates a mount subdir in mount path prefix */
-gchar* r_create_mount_point(const gchar *name, GError **error) {
+gchar* r_create_mount_point(const gchar *name, GError **error)
+{
 	gchar* prefix;
 	gchar* mountpoint = NULL;
 
@@ -131,7 +135,8 @@ out:
 	return mountpoint;
 }
 
-gboolean r_mount_slot(RaucSlot *slot, GError **error) {
+gboolean r_mount_slot(RaucSlot *slot, GError **error)
+{
 	GError *ierror = NULL;
 	gboolean res = FALSE;
 	gchar *mount_point = NULL;
@@ -177,7 +182,8 @@ out:
 	return res;
 }
 
-gboolean r_umount_slot(RaucSlot *slot, GError **error) {
+gboolean r_umount_slot(RaucSlot *slot, GError **error)
+{
 	GError *ierror = NULL;
 	gboolean res = FALSE;
 

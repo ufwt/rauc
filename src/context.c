@@ -10,7 +10,8 @@
 
 RaucContext *context = NULL;
 
-static const gchar* get_cmdline_bootname(void) {
+static const gchar* get_cmdline_bootname(void)
+{
 	GRegex *regex = NULL;
 	GMatchInfo *match = NULL;
 	char *contents = NULL;
@@ -93,7 +94,8 @@ out:
 	return bootname;
 }
 
-static gboolean launch_and_wait_variables_handler(gchar *handler_name, GHashTable *variables, GError **error) {
+static gboolean launch_and_wait_variables_handler(gchar *handler_name, GHashTable *variables, GError **error)
+{
 	GSubprocessLauncher *handlelaunch = NULL;
 	GSubprocess *handleproc = NULL;
 	GError *ierror = NULL;
@@ -158,7 +160,8 @@ out:
 	return res;
 }
 
-static gchar* get_system_dtb_compatible(GError **error) {
+static gchar* get_system_dtb_compatible(GError **error)
+{
 	gchar *contents = NULL;
 	GError *ierror = NULL;
 
@@ -170,7 +173,8 @@ static gchar* get_system_dtb_compatible(GError **error) {
 	return contents;
 }
 
-static gchar* get_variant_from_file(const gchar* filename, GError **error) {
+static gchar* get_variant_from_file(const gchar* filename, GError **error)
+{
 	gchar *contents = NULL;
 	GError *ierror = NULL;
 
@@ -183,7 +187,8 @@ static gchar* get_variant_from_file(const gchar* filename, GError **error) {
 }
 
 
-static void r_context_configure(void) {
+static void r_context_configure(void)
+{
 	gboolean res = TRUE;
 	GError *error = NULL;
 
@@ -265,7 +270,8 @@ static void r_context_configure(void) {
 	context->pending = FALSE;
 }
 
-gboolean r_context_get_busy(void) {
+gboolean r_context_get_busy(void)
+{
 	if (context == NULL) {
 		return FALSE;
 	}
@@ -273,7 +279,8 @@ gboolean r_context_get_busy(void) {
 	return context->busy;
 }
 
-void r_context_set_busy(gboolean busy) {
+void r_context_set_busy(gboolean busy)
+{
 	g_assert_nonnull(context);
 	g_assert(context->busy != busy);
 
@@ -283,7 +290,8 @@ void r_context_set_busy(gboolean busy) {
 	context->busy = busy;
 }
 
-static void r_context_send_progress(gboolean op_finished, gboolean success) {
+static void r_context_send_progress(gboolean op_finished, gboolean success)
+{
 	RaucProgressStep *step;
 	RaucProgressStep *iter_step;
 	gfloat percentage = 0;
@@ -326,7 +334,8 @@ static void r_context_send_progress(gboolean op_finished, gboolean success) {
 }
 
 void r_context_begin_step(const gchar *name, const gchar *description,
-		gint substeps) {
+		gint substeps)
+{
 
 	RaucProgressStep *step = g_new0(RaucProgressStep, 1);
 	RaucProgressStep *parent;
@@ -368,7 +377,8 @@ void r_context_begin_step(const gchar *name, const gchar *description,
 	r_context_send_progress(FALSE, FALSE);
 }
 
-void r_context_end_step(const gchar *name, gboolean success) {
+void r_context_end_step(const gchar *name, gboolean success)
+{
 	RaucProgressStep *step;
 	GList *step_element;
 	RaucProgressStep *parent;
@@ -425,7 +435,8 @@ void r_context_end_step(const gchar *name, gboolean success) {
 	g_free(step);
 }
 
-void r_context_set_step_percentage(const gchar *name, gint custom_percent) {
+void r_context_set_step_percentage(const gchar *name, gint custom_percent)
+{
 	RaucProgressStep *step;
 	RaucProgressStep *parent;
 	gint percent_difference;
@@ -458,14 +469,16 @@ void r_context_set_step_percentage(const gchar *name, gint custom_percent) {
 		r_context_send_progress(FALSE, FALSE);
 }
 
-void r_context_register_progress_callback(progress_callback progress_cb) {
+void r_context_register_progress_callback(progress_callback progress_cb)
+{
 	g_assert_nonnull(progress_cb);
 	g_assert_null(context->progress_callback);
 
 	context->progress_callback = progress_cb;
 }
 
-RaucContext *r_context_conf(void) {
+RaucContext *r_context_conf(void)
+{
 	if (context == NULL) {
 		network_init();
 		signature_init();
@@ -483,7 +496,8 @@ RaucContext *r_context_conf(void) {
 	return context;
 }
 
-const RaucContext *r_context(void) {
+const RaucContext *r_context(void)
+{
 	g_assert_nonnull(context);
 
 	if (context->pending)
